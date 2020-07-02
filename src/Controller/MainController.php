@@ -36,5 +36,15 @@ class MainController
         return new JsonResponse($this->parse->parse($request));
     }
 
+    /**
+     * @Route("/tags/{id}", name="get_task", requirements={"id"="\d+"})
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getTask(int $id): JsonResponse
+    {
+        return new JsonResponse($this->parse->get($id));
+    }
+
 
 }
