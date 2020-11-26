@@ -70,7 +70,7 @@ class Parse
             if (preg_match("/^HTTP.+\s(\d\d\d)\s/", $header, $m)) $code = $m[1];
         }
         if ($code == 200) return true;
-        else return false;
+        return false;
     }
 
     /**
