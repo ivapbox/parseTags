@@ -9,7 +9,11 @@ use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class Parse
+/**
+ * Class Parse
+ * @package App\Service
+ */
+class ParseService
 {
     /**
      * @var EntityManagerInterface
@@ -63,20 +67,28 @@ class Parse
     private function validUrl(string $url): bool
     {
         $file_headers = get_headers($url);
-        if ($file_headers === false) return false;
+        if ($file_headers === false) {
+            return false;
+        }
         $code = 0;
         foreach ($file_headers as $header) {
-            if (preg_match("/^Location: (http.+)$/", $header, $m)) $url = $m[1];
-            if (preg_match("/^HTTP.+\s(\d\d\d)\s/", $header, $m)) $code = $m[1];
+            if (preg_match("/^Location: (http.+)$/", $header, $m)) {
+                $url = $m[1];
+            }
+            if (preg_match("/^HTTP.+\s(\d\d\d)\s/", $header, $m)) {
+                $code = $m[1];
+            }
         }
-        if ($code == 200) return true;
+        if ($code == 200) {
+            return true;
+        }
         return false;
     }
 
     /**
      * @param Task $task
      */
-    private function action(Task &$task)
+    private function action(Task $task)
     {
         $task->setStatus('process');
         $this->em->flush();

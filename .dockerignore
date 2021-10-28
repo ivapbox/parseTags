@@ -1,0 +1,4 @@
+.git
+src/var/cache
+src/var/log
+src/.env.local

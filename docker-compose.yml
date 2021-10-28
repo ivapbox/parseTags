@@ -1,0 +1,47 @@
+# Development environment
+version: "2"
+services:
+  applications:
+    image: tianon/true
+    volumes:
+      - ./src:/var/www/app
+
+  php-fpm:
+    image: app_php-fpm
+    env_file: ./common.env
+    volumes_from:
+      - applications
+
+  nginx:
+    image: app_nginx
+    volumes_from:
+      - applications
+    ports:
+      - "8001:80"
+    depends_on:
+      - php-fpm
+
+  postgres:
+    image: app_postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - "54320:5432"
+    env_file: ./common.env
+
+  cron:
+    image: app_php-fpm
+    env_file: ./common.env
+    command: go-crond --no-auto -v /crontab
+    volumes_from:
+      - applications
+    restart: always
+
+networks:
+  default:
+    external:
+      name: alexander-external-network
+
+volumes:
+  postgres:
+    driver: "local"
